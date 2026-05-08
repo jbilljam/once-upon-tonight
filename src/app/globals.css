@@ -18,8 +18,13 @@
   .text-shadow-soft {
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   }
+
+  .text-shadow-glow {
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.3), 0 0 40px rgba(251, 191, 36, 0.1), 0 2px 10px rgba(0, 0, 0, 0.5);
+  }
 }
 
+/* Stars */
 .star {
   position: absolute;
   width: 3px;
@@ -41,6 +46,7 @@
   box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.4);
 }
 
+/* Scene emojis */
 @keyframes gentlePulse {
   0%, 100% { transform: scale(1); opacity: 0.8; }
   50% { transform: scale(1.1); opacity: 1; }
@@ -51,6 +57,7 @@
   filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
 }
 
+/* Story text */
 .page-text {
   font-size: 1.25rem;
   line-height: 1.9;
@@ -72,6 +79,63 @@
   opacity: 0.85;
 }
 
+/* Shimmer button effect */
+.shimmer-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: btnShimmer 3s ease-in-out infinite;
+}
+
+@keyframes btnShimmer {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
+}
+
+/* Animated gradient backgrounds */
+.animated-gradient {
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Glass card effect */
+.glass-card {
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Premium card hover glow */
+.card-glow {
+  transition: all 0.3s ease;
+}
+
+.card-glow:hover {
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.05), 0 0 60px rgba(255, 255, 255, 0.02);
+}
+
+/* Scrollbar hiding */
 ::-webkit-scrollbar {
   display: none;
 }
@@ -81,10 +145,27 @@
   scrollbar-width: none;
 }
 
+/* Safe areas */
 .safe-bottom {
   padding-bottom: max(1rem, env(safe-area-inset-bottom));
 }
 
 .safe-top {
   padding-top: max(0.5rem, env(safe-area-inset-top));
+}
+
+/* Text reveal for story lines */
+.text-reveal-line {
+  opacity: 0;
+  transform: translateY(8px);
+  filter: blur(4px);
+  animation: textRevealLine 0.6s ease-out forwards;
+}
+
+@keyframes textRevealLine {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }

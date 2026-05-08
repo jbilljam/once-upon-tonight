@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import StarryBackground from '@/components/StarryBackground'
+import FireflyCanvas from '@/components/FireflyCanvas'
+import FloatingIllustrations from '@/components/FloatingIllustrations'
 import SelectScreen from '@/components/SelectScreen'
 import LoadingScreen from '@/components/LoadingScreen'
 import StoryViewer from '@/components/StoryViewer'
@@ -47,7 +49,13 @@ export default function Home() {
 
   return (
     <main className="relative min-h-dvh">
-      {screen !== 'reading' && <StarryBackground />}
+      {screen !== 'reading' && (
+        <>
+          <StarryBackground />
+          <FloatingIllustrations />
+          <FireflyCanvas />
+        </>
+      )}
 
       <AnimatePresence mode="wait">
         {screen === 'select' && (
@@ -61,7 +69,7 @@ export default function Home() {
             <SelectScreen onGenerate={handleGenerate} isLoading={false} />
             {error && (
               <div className="fixed bottom-24 left-4 right-4 z-50">
-                <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-4 text-center backdrop-blur-sm">
+                <div className="glass-card rounded-xl p-4 text-center border-red-500/20">
                   <p className="text-red-200 text-sm">{error}</p>
                   <button
                     onClick={() => setError(null)}

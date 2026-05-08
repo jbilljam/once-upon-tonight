@@ -22,28 +22,40 @@ function CharacterCard({
   return (
     <motion.button
       whileTap={{ scale: 0.97 }}
+      whileHover={{ scale: 1.01 }}
       onClick={onSelect}
-      className={`relative w-full rounded-2xl p-5 text-left transition-all duration-300 ${
+      className={`relative w-full rounded-2xl p-5 text-left transition-all duration-300 card-glow ${
         isSelected
           ? `bg-gradient-to-br ${character.colorFrom} ${character.colorTo} ring-2 ring-white/40 shadow-lg shadow-white/10`
-          : 'bg-white/5 hover:bg-white/10 ring-1 ring-white/10'
+          : 'glass-card hover:bg-white/[0.08]'
       }`}
     >
-      <div className="flex items-center gap-4">
-        <span className="text-4xl scene-emoji" style={{ animationDelay: `${Math.random() * 2}s` }}>
+      {isSelected && (
+        <motion.div
+          layoutId="card-glow-bg"
+          className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/10 to-transparent"
+          transition={{ duration: 0.3 }}
+        />
+      )}
+      <div className="relative flex items-center gap-4">
+        <motion.span
+          animate={isSelected ? { scale: [1, 1.15, 1] } : {}}
+          transition={{ duration: 0.4 }}
+          className="text-4xl scene-emoji"
+        >
           {character.emoji}
-        </span>
+        </motion.span>
         <div className="flex-1 min-w-0">
-          <h3 className="text-xl font-semibold text-white">{character.name}</h3>
+          <h3 className="text-xl font-semibold text-white font-sans tracking-tight">{character.name}</h3>
           {character.id === 'both' && (
             <p className="text-sm text-white/50 mt-0.5">A story for both of them together</p>
           )}
         </div>
         {isSelected && (
           <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center"
+            initial={{ scale: 0, rotate: -90 }}
+            animate={{ scale: 1, rotate: 0 }}
+            className="w-7 h-7 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center"
           >
             <span className="text-sm">✓</span>
           </motion.div>
@@ -65,17 +77,23 @@ export default function SelectScreen({ onGenerate, isLoading }: SelectScreenProp
   }
 
   return (
-    <div className="min-h-dvh flex flex-col px-5 py-8 safe-top safe-bottom">
+    <div className="min-h-dvh flex flex-col px-5 py-8 safe-top safe-bottom relative z-20">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-8"
+        className="text-center mb-10"
       >
-        <div className="text-5xl mb-3">🌙</div>
-        <h1 className="text-3xl font-bold text-shadow-story bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-200 bg-clip-text text-transparent">
+        <motion.div
+          animate={{ y: [0, -6, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          className="text-6xl mb-4"
+        >
+          🌙
+        </motion.div>
+        <h1 className="text-5xl sm:text-6xl font-display text-shadow-glow bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-200 bg-clip-text text-transparent">
           Once Upon Tonight
         </h1>
-        <p className="text-white/50 text-sm mt-2">A brand new story, every night</p>
+        <p className="text-white/40 text-sm mt-3 font-sans tracking-wide">A brand new story, every night</p>
       </motion.div>
 
       <motion.div
@@ -85,7 +103,7 @@ export default function SelectScreen({ onGenerate, isLoading }: SelectScreenProp
         className="space-y-6 flex-1"
       >
         <div>
-          <h2 className="text-sm font-medium text-white/40 uppercase tracking-wider mb-3">
+          <h2 className="text-xs font-medium text-white/30 uppercase tracking-[0.2em] mb-3 font-sans">
             Who&apos;s tonight&apos;s hero?
           </h2>
           <div className="space-y-3">
@@ -103,12 +121,16 @@ export default function SelectScreen({ onGenerate, isLoading }: SelectScreenProp
         <div>
           <button
             onClick={() => setShowThemes(!showThemes)}
-            className="text-sm font-medium text-white/40 uppercase tracking-wider flex items-center gap-2"
+            className="text-xs font-medium text-white/30 uppercase tracking-[0.2em] flex items-center gap-2 font-sans"
           >
             Story theme
-            <span className="text-xs transition-transform" style={{ transform: showThemes ? 'rotate(180deg)' : '' }}>
+            <motion.span
+              animate={{ rotate: showThemes ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+              className="text-[10px]"
+            >
               ▼
-            </span>
+            </motion.span>
           </button>
           {showThemes && (
             <motion.div
@@ -120,10 +142,10 @@ export default function SelectScreen({ onGenerate, isLoading }: SelectScreenProp
                 <button
                   key={theme.id}
                   onClick={() => setSelectedTheme(theme.id)}
-                  className={`px-3 py-1.5 rounded-full text-sm transition-all ${
+                  className={`px-3.5 py-1.5 rounded-full text-sm transition-all font-sans ${
                     selectedTheme === theme.id
-                      ? 'bg-white/20 ring-1 ring-white/30 text-white'
-                      : 'bg-white/5 text-white/50 hover:bg-white/10'
+                      ? 'bg-white/15 ring-1 ring-white/25 text-white shadow-sm shadow-white/5'
+                      : 'bg-white/[0.04] text-white/40 hover:bg-white/[0.08] hover:text-white/60'
                   }`}
                 >
                   {theme.emoji} {theme.label}
@@ -136,9 +158,9 @@ export default function SelectScreen({ onGenerate, isLoading }: SelectScreenProp
         <div>
           <label
             htmlFor="context"
-            className="text-sm font-medium text-white/40 uppercase tracking-wider block mb-2"
+            className="text-xs font-medium text-white/30 uppercase tracking-[0.2em] block mb-2 font-sans"
           >
-            What did we do today? <span className="normal-case text-white/25">(optional)</span>
+            What did we do today? <span className="normal-case text-white/20">(optional)</span>
           </label>
           <textarea
             id="context"
@@ -146,7 +168,7 @@ export default function SelectScreen({ onGenerate, isLoading }: SelectScreenProp
             onChange={(e) => setTodayContext(e.target.value)}
             placeholder="e.g., went to the park, saw a rainbow, had pizza for dinner..."
             rows={2}
-            className="w-full bg-white/5 rounded-xl px-4 py-3 text-white placeholder-white/20 text-sm border border-white/10 focus:border-white/25 focus:outline-none resize-none"
+            className="w-full glass-card rounded-xl px-4 py-3 text-white placeholder-white/15 text-sm focus:ring-1 focus:ring-white/20 focus:outline-none resize-none font-sans"
           />
         </div>
       </motion.div>
@@ -155,15 +177,15 @@ export default function SelectScreen({ onGenerate, isLoading }: SelectScreenProp
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
-        className="mt-6 pb-2"
+        className="mt-8 pb-2"
       >
         <button
           onClick={handleGenerate}
           disabled={!selectedCharacter || isLoading}
-          className={`w-full py-4 rounded-2xl text-lg font-semibold transition-all duration-300 ${
+          className={`w-full py-4 rounded-2xl text-lg font-semibold transition-all duration-300 font-sans ${
             selectedCharacter && !isLoading
-              ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-slate-900 shadow-lg shadow-amber-500/25 active:scale-[0.98]'
-              : 'bg-white/10 text-white/30 cursor-not-allowed'
+              ? 'bg-gradient-to-r from-amber-400 via-yellow-400 to-orange-400 text-slate-900 shadow-lg shadow-amber-500/20 active:scale-[0.98] shimmer-btn animate-glow-pulse'
+              : 'bg-white/[0.06] text-white/25 cursor-not-allowed border border-white/[0.04]'
           }`}
         >
           {isLoading ? (
