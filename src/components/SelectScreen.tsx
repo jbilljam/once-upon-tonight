@@ -38,7 +38,7 @@ function CharacterCard({
           <p className="text-sm text-white/60 mt-0.5">
             {character.id === 'both'
               ? 'A story for both of them together'
-              : `Age ${character.age} — ${character.interests.slice(0, 3).join(', ')}`}
+              : `Age ${character.age} — ${character.description.split('who ')[1] || character.description}`}
           </p>
         </div>
         {isSelected && (
