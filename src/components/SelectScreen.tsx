@@ -34,12 +34,10 @@ function CharacterCard({
           {character.emoji}
         </span>
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-white">{character.name}</h3>
-          <p className="text-sm text-white/60 mt-0.5">
-            {character.id === 'both'
-              ? 'A story for both of them together'
-              : `Age ${character.age} — ${character.description.split('who ')[1] || character.description}`}
-          </p>
+          <h3 className="text-xl font-semibold text-white">{character.name}</h3>
+          {character.id === 'both' && (
+            <p className="text-sm text-white/50 mt-0.5">A story for both of them together</p>
+          )}
         </div>
         {isSelected && (
           <motion.div
